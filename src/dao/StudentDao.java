@@ -18,28 +18,6 @@ public class StudentDao extends Dao {
 	}
 
 	private List<Student> postFilter(ResultSet rSet, School school) throws Exception {
-
-	}
-
-	public List<Student> filter(School school, int entYear, String classNum, boolean isAttend) throws Exception {
-
-	}
-
-	public List<Student> filter(School school, int entYear, boolean isAttend) throws Exception {
-
-	}
-
-	public List<Student> filter(School school, boolean isAttend) throws Exception {
-
-	}
-
-	public boolean save(Student student) throws Exception {
-
-	}
-
-	private String baseSql = "select * from student where school_cd=?";
-
-	private List<Student> postFilter(RessultSet rSet, School school) throws Exception {
 		//リストを初期化
 		List<Student> list = new ArrayList<>();
 		try {
@@ -60,9 +38,9 @@ public class StudentDao extends Dao {
 		} catch (SQLException | NullPointerException e) {
 			e.printStackTrace();
 		}
-
 		return list;
 	}
+
 	public List<Student> filter(School school, int entYear, String classNum, boolean isAttend) throws Exception {
 		//リストを初期化
 		List<Student> list = new ArrayList<>();
@@ -119,6 +97,7 @@ public class StudentDao extends Dao {
 		}
 		return list;
 	}
+
 	public List<Student> filter(School school, int entYear, boolean isAttend) throws Exception {
 		//リストを初期化
 		List<Student> list = new ArrayList<>();
@@ -175,6 +154,7 @@ public class StudentDao extends Dao {
 
 		return list;
 	}
+
 	public List<Student> filter(School school, boolean isAttend) throws Exception {
 		//リストを初期化
 		List<Student> list = new ArrayList<>();
@@ -226,63 +206,7 @@ public class StudentDao extends Dao {
 
 		return list;
 	}
-	public Student get(String no) throws Exception {
-		//学生インスタンスを初期化
-		Student student = new Student();
-		//データベースへのコネクションを確立
-		Connection connection = getConnection();
-		//プリペアードステートメント
-		PreparedStatement statement = null;
 
-		try {
-			//プリペアードステートメントにSQL文をセット
-			statement = connection.prepareStatement("select * from student where no=?)";
-			//プリペアードステートメントに学生番号をバインド
-			statement.setString(1, no);
-			//プリペアードステートメントを実行
-			ResultSet rSet = statement.executeQuery();
-
-			//学校Daoを初期化
-			SchoolDao schoolDao = new SchoolDao();
-
-			if (rSet.next()) {
-				//リザルトセットが存在する場合
-				//学生インスタンスに検索結果をセット
-				student.setNo(rSet.getString("no"));
-				student.setName(rSet.getString("name"));
-				student.setEntYear(rSet.getInt("ent_year"));
-				student.setClassNum(rSet.getString("class_num"));
-				student.setAttend(rSet.getBoolean("is_attend"));
-				//学校フィールドには学校コードで検索した学校インスタンスをセット
-				student.setSchool(schoolDao.get(rSet.getString("school_cd")));
-			} else {
-				//リザルトセットが存在しない場合
-				//学生インスタンスにnullをセット
-				student = null;
-			}
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			//プリペアードステートメントを閉じる
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException sqle) {
-					throw sqle;
-				}
-			}
-			//コネクションを閉じる
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException sqle) {
-					throw sqle;
-				}
-			}
-		}
-
-		return student;
-	}
 	public boolean save(Student student) throws Exception {
 		//コネクションを確立
 		Connection connection = getConnection();
@@ -349,4 +273,7 @@ public class StudentDao extends Dao {
 			return false;
 		}
 	}
+
+	private String baseSql = "select * from student where school_cd=?";
+
 }

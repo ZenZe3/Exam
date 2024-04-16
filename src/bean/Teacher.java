@@ -2,42 +2,30 @@ package bean;
 
 import java.io.Serializable;
 
-public class Student implements Serializable {
-	private String no;
+public class Teacher implements Serializable {
+
+	private String id;
+	private String password;
 	private String name;
-	private int entYear;
-	private String classNum;
-	private boolean isAttend;
 	private School school;
-	public String getNo() {
-		return no;
+
+	public String getId() {
+		return id;
 	}
-	public void setNo(String no) {
-		this.no = no;
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public int getEntYear() {
-		return entYear;
-	}
-	public void setEntYear(int entYear) {
-		this.entYear = entYear;
-	}
-	public String getClassNum() {
-		return classNum;
-	}
-	public void setClassNum(String classNum) {
-		this.classNum = classNum;
-	}
-	public boolean isAttend() {
-		return isAttend;
-	}
-	public void setAttend(boolean isAttend) {
-		this.isAttend = isAttend;
 	}
 	public School getSchool() {
 		return school;
