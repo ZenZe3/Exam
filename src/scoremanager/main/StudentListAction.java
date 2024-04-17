@@ -8,8 +8,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import bean.School;
 import bean.Student;
 import bean.Teacher;
 import dao.StudentDao;
@@ -20,8 +20,19 @@ public class StudentListAction extends Action {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO 自動生成されたメソッド・スタブ
-		HttpSession session = request.getSession();//セッション
-		Teacher teacher = (Teacher)session.getAttribute("user");
+		//HttpSession session = request.getSession();//セッション
+		//Teacher teacher = (Teacher)session.getAttribute("user");
+		//テスト用に学校オブジェクトと講師オブジェクトを一時的に作る
+
+		School school = new School();
+		school.setCd("tes");//学校コードをセットする
+		school.setName("テスト校");//学校名をセットする
+
+		Teacher teacher = new Teacher();
+		teacher.setId("admin1");//講師IDをセット
+		teacher.setName("管理者１");//講師名をセット
+		teacher.setPassword("password");//ログインパスワードをセット
+		teacher.setSchool(school);//学校オブジェクトをセット
 
 		String entYearStr="";//入力された入学年度
 		String classNum="";//入力されたクラス番号
