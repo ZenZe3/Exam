@@ -12,10 +12,63 @@ import bean.Student;
 
 public class StudentDao extends Dao {
 
-	private String baseSql1;
+	private String baseSql = "select * from student where school_cd=? ";
 
 	public Student get(String no) throws Exception {
-		return null;
+			//学生インスタンスを初期化
+			Student student = new Student();
+			//データベースへのコネクションを確立
+			Connection connection = getConnection();
+			//プリペアードステートメント
+			PreparedStatement statement = null;
+			try {
+				//プリペアードステートメントにSQL文をセット
+				statement = connection.prepareStatement("select * from student where no=?");
+				//
+				statement.setString(1, no);
+				//
+				ResultSet rSet = statement.executeQuery();
+
+				//
+				SchoolDao schoolDao = new SchoolDao();
+
+				if (rSet.next()) {
+					//
+					//
+					student.setNo(rSet.getString("no"));
+					student.setName(rSet.getString("name"));
+					student.setEntYear(rSet.getInt("ent_year"));
+					student.setClassNum(rSet.getString("class_num"));
+					student.setAttend(rSet.getBoolean("is_attend"));
+					//
+					student.setSchool(schoolDao.get(rSet.getString("school_cd")));
+				} else {
+					//
+					//
+					student = null;
+				}
+			} catch (Exception e) {
+				throw e;
+			} finally {
+				//
+				if (statement != null) {
+					try {
+						statement.close();
+					} catch (SQLException sqle) {
+						throw sqle;
+					}
+				}
+				//
+				if (connection != null) {
+					try {
+						connection.close();
+					} catch (SQLException sqle) {
+						throw sqle;
+					}
+				}
+			}
+
+			return student;
 
 	}
 
@@ -66,7 +119,7 @@ public class StudentDao extends Dao {
 
 		try {
 			//プリペアードステートメントにSQL文をセット
-			statement = connection.prepareStatement(baseSql1 + condition + conditionIsAttend + order);
+			statement = connection.prepareStatement(baseSql + condition + conditionIsAttend + order);
 			//プリペアードステートメントに学校コードをバインド
 			statement.setString(1, school.getCd());
 			//プリペアードステートメントに入学年度をバインド
@@ -123,7 +176,7 @@ public class StudentDao extends Dao {
 
 		try {
 			//プリペアードステートメントにSQL文をセット
-			statement = connection.prepareStatement(baseSql1 + condition + conditionIsAttend + order);
+			statement = connection.prepareStatement(baseSql + condition + conditionIsAttend + order);
 			//プリペアードステートメントに学校コードをバインド
 			statement.setString(1, school.getCd());
 			//プリペアードステートメントに入学年度をバインド
@@ -178,7 +231,7 @@ public class StudentDao extends Dao {
 
 		try {
 			//プリペアードステートメントにSQL文をセット
-			statement = connection.prepareStatement(baseSql1 + conditionIsAttend + order);
+			statement = connection.prepareStatement(baseSql + conditionIsAttend + order);
 			//プリペアードステートメントに学校コードをバインド
 			statement.setString(1, school.getCd());
 			//プリペアードステートメントを実行
@@ -276,6 +329,5 @@ public class StudentDao extends Dao {
 		}
 	}
 
-	private String baseSql = "select * from student where school_cd=?";
 
 }
