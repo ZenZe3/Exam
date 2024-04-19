@@ -15,61 +15,60 @@ public class StudentDao extends Dao {
 	private String baseSql = "select * from student where school_cd=? ";
 
 	public Student get(String no) throws Exception {
-			//学生インスタンスを初期化
-			Student student = new Student();
-			//データベースへのコネクションを確立
-			Connection connection = getConnection();
-			//プリペアードステートメント
-			PreparedStatement statement = null;
-			try {
-				//プリペアードステートメントにSQL文をセット
-				statement = connection.prepareStatement("select * from student where no=?");
-				//
-				statement.setString(1, no);
-				//
-				ResultSet rSet = statement.executeQuery();
+		//学生インスタンスを初期化
+		Student student = new Student();
+		//データベースへのコネクションを確立
+		Connection connection = getConnection();
+		//プリペアードステートメント
+		PreparedStatement statement = null;
+		try {
+			//プリペアードステートメントにSQL文をセット
+			statement = connection.prepareStatement("select * from student where no=?");
+			//
+			statement.setString(1, no);
+			//
+			ResultSet rSet = statement.executeQuery();
 
-				//
-				SchoolDao schoolDao = new SchoolDao();
+			//
+			SchoolDao schoolDao = new SchoolDao();
 
-				if (rSet.next()) {
-					//
-					//
-					student.setNo(rSet.getString("no"));
-					student.setName(rSet.getString("name"));
-					student.setEntYear(rSet.getInt("ent_year"));
-					student.setClassNum(rSet.getString("class_num"));
-					student.setAttend(rSet.getBoolean("is_attend"));
-					//
-					student.setSchool(schoolDao.get(rSet.getString("school_cd")));
-				} else {
-					//
-					//
-					student = null;
-				}
-			} catch (Exception e) {
-				throw e;
-			} finally {
+			if (rSet.next()) {
 				//
-				if (statement != null) {
-					try {
-						statement.close();
-					} catch (SQLException sqle) {
-						throw sqle;
-					}
-				}
 				//
-				if (connection != null) {
-					try {
-						connection.close();
-					} catch (SQLException sqle) {
-						throw sqle;
-					}
+				student.setNo(rSet.getString("no"));
+				student.setName(rSet.getString("name"));
+				student.setEntYear(rSet.getInt("ent_year"));
+				student.setClassNum(rSet.getString("class_num"));
+				student.setAttend(rSet.getBoolean("is_attend"));
+				//
+				student.setSchool(schoolDao.get(rSet.getString("school_cd")));
+			} else {
+				//
+				//
+				student = null;
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			//
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException sqle) {
+					throw sqle;
 				}
 			}
+			//
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+		}
 
-			return student;
-
+		return student;
 	}
 
 	private List<Student> postFilter(ResultSet rSet, School school) throws Exception {
