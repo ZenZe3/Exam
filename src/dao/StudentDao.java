@@ -23,7 +23,7 @@ public class StudentDao extends Dao {
 		PreparedStatement statement = null;
 		try {
 			//プリペアードステートメントにSQL文をセット
-			statement = connection.prepareStatement("select * from student where no=?");
+			statement = connection.prepareStatement("select * from student where no=? ");
 			//
 			statement.setString(1, no);
 			//
