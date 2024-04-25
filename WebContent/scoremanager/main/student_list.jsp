@@ -21,7 +21,7 @@
 						<select class="form-select" id="student-f1-select" name="f1">
 							<option value="0">--------</option>
 							<c:forEach var="year" items="${ent_year_set}">
-								<%-- --%>
+								<%--現在のyearと選択されていたf1が一致していた場合selectedを追記 --%>
 								<option value="${year}" <c:if test="year=={f1}">selected</c:if>>${year}</option>
 							</c:forEach>
 						</select>
@@ -29,16 +29,18 @@
 					<div class="col-4">
 						<label class="form-label" for="student-f2-select">クラス</label>
 						<select class="form-select" id="student-f2-select" name="f2">
-							<option value="0">
+							<option value="0">--------</option>
 							<c:forEach var="num" items="${class_num_set}">
-								<%-- --%>
+
+
+								<%-- 現在のnumと選択されていたf2が一致していた場合selectedを追記 --%>
 								<option value="${num}" <c:if test="${num==f2}">selected</c:if>>${num}</option>
 							</c:forEach>
 						</select>
 					</div>
 					<div class="col-2 form-check text-center">
 						<label class="form-check-label" for="student-f3-check">在学中
-							<%-- --%>
+							<%-- パラメーターf3が存在している場合checkedを追記 --%>
 							<input class="form-check-input" type="checkbox"
 							id="student-f3-check" name="f3" value="t"
 							<c:if test="${!empty f3}">checked</c:if> />
@@ -50,6 +52,7 @@
 					<div class="mt-2 text-warning">${errors.get("f1")}</div>
 				</div>
 			</form>
+
 			<c:choose>
 				<c:when test="${students.size()>0}">
 				<div>検索結果：${students.size()}件</div>
@@ -63,6 +66,7 @@
 						<th></th>
 						<th></th>
 					</tr>
+
 					<c:forEach var="student" items="${students}">
 						<tr>
 							<td>${student.entYear}</td>
@@ -70,7 +74,7 @@
 							<td>${student.name}</td>
 							<td>${student.classNum}</td>
 							<td class="text-center">
-								<%-- --%>
+								<%-- 在学フラグが立っている場合「〇」それ以外は「✕」を表示 --%>
 								<c:choose>
 								<c:when test="${student.isAttend()}">
 									〇

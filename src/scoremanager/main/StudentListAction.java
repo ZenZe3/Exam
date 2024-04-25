@@ -26,7 +26,7 @@ public class StudentListAction extends Action {
 		//テスト用に学校オブジェクトと講師オブジェクトを一時的に作る
 
 		School school = new School();
-		school.setCd("tes");//学校コードをセットする
+		school.setCd("oom");//学校コードをセットする
 		school.setName("テスト校");//学校名をセットする
 
 		Teacher teacher = new Teacher();
