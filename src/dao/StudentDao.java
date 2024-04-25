@@ -285,7 +285,7 @@ public class StudentDao extends Dao{
 			}else{
 				//学生が存在した場合
 				//プライベートステートメントにUPDATE文をセット
-				statement = connection.prepareStatement("update student set name=?,ent_year=?,class_num=?,is_atend=? where no=?");
+				statement = connection.prepareStatement("update student set name=?,ent_year=?,class_num=?,is_attend=? where no=?");
 				//プライベートステートメントに値をバインド
 				statement.setString(1, student.getName());
 				statement.setInt(2, student.getEntYear());

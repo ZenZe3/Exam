@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import bean.School;
 import bean.Student;
 import bean.Teacher;
 import dao.ClassNumDao;
@@ -30,7 +31,7 @@ public class StudentCreateExecuteAction extends Action {
 		Student student = null;//学生
 		Map<String, String> errors = new HashMap<>();// エラーメッセージ
 		ClassNumDao cNumDao = new ClassNumDao();// クラス番号Daoを初期化
-		Teacher teacher = (Teacher) session.getAttribute("user");// ログインユーザーを取得
+		//Teacher teacher = (Teacher) session.getAttribute("user");// ログインユーザーを取得
 		LocalDate todaysDate = LocalDate.now();// LcalDateインスタンスを取得
 		int year = todaysDate.getYear();// 現在の年を取得
 		List<Integer> entYearSet = new ArrayList<>();//入学年度のリストを初期化
@@ -41,10 +42,19 @@ public class StudentCreateExecuteAction extends Action {
 		name = req.getParameter("name");//氏名
 		classNum = req.getParameter("class_num");//クラス番号
 
+		School school = new School();
+		school.setCd("oom");//学校コードをセットする
+		school.setName("テスト校");//学校名をセットする
+
+		Teacher teacher = new Teacher();
+		teacher.setId("admin1");//講師IDをセット
+		teacher.setName("管理者１");//講師名をセット
+		teacher.setPassword("password");//ログインパスワードをセット
+		teacher.setSchool(school);//学校オブジェクトをセット
+
 		//DBからデータ取得 3
 		student = sDao.get(no);// 学生番号から学生インスタンスを取得
 		List<String> list = cNumDao.filter(teacher.getSchool());// ログインユーザーの学校コードをもとにクラス番号の一覧を取得
-
 
 		//ビジネスロジック 4
 		//DBへデータ保存 5
@@ -65,7 +75,8 @@ public class StudentCreateExecuteAction extends Action {
 				student.setEntYear(entYear);
 				student.setClassNum(classNum);
 				student.setAttend(true);
-				student.setSchool(((Teacher)session.getAttribute("user")).getSchool());
+				student.setSchool(school);
+				//student.setSchool(((Teacher)session.getAttribute("user")).getSchool());
 				// 学生を保存
 				sDao.save(student);
 			} else {//入力された学番がDBに保存されていた場合
